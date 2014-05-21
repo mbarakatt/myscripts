@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import sys
 usage ="""
 python physical_to_genetic.py physical_position_file map_file
