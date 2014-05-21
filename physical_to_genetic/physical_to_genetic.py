@@ -8,6 +8,7 @@ DATA MUST BE SORTED
 Output is in stdout
 """
 
+
 fake_incr=0.000001
 
 args=sys.argv

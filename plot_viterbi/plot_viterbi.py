@@ -3,6 +3,7 @@ import sys
 from Tkinter import *
 import copy
 
+
 CHR_HEIGHT=4 #the height of the rectangle for the colored chromosome
 CHR_WIDTH=187 #the width of the rectangle for the colored chromosome
 DISTANCE_BETWEEN_CHR=0 #the distance between chromosome in the same box!
