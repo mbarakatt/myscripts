@@ -3,6 +3,7 @@ import sys
 arg=sys.argv
 import os
 
+
 #usage python haps2RFMix.py Admixed_pop.haps refpop1.haps refpop2.haps ... out_folder out_name
 #outputs the allele.txt and classes.txt file in folders in the directory 
 
