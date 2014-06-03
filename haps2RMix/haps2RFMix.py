@@ -6,20 +6,9 @@ import os
 
 #usage: python haps2RFMix.py Admixed_pop.haps refpop1.haps refpop2.haps ... out_folder out_name
 #outputs the allele.txt and classes.txt file in folders in the directory 
+#Note: script will look at genotyping flip (i.e A T vs T A ) between the admixed haps file and the refpop1 haps file correct them. Make sure there is no flip inconsistency within the repop*.haps file
 
-
-
-def complement(char):
-	if char == 'A':
-		return 'T'
-	elif char == 'T':
-		return 'A'
-	elif char == 'G':
-		return 'C'
-	else :
-		return 'G'
-
-#identify .haps files in the arguements
+#identify .haps files in the arguments
 hapfiles=[]
 for input in arg:
 	if ".haps" ==  input[-5:]:
