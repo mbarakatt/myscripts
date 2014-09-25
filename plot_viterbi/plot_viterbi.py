@@ -1,8 +1,9 @@
+#!/usr/bin/env python
 import math
 import sys
 from Tkinter import *
 import copy
-
+import gzip
 
 CHR_HEIGHT=4 #the height of the rectangle for the colored chromosome
 CHR_WIDTH=187 #the width of the rectangle for the colored chromosome
@@ -19,7 +20,12 @@ color=["no_ancestry","red","blue","orange","gray"]
 #LOADING FILES
 args=sys.argv
 
-f_viterbi=open(args[1],'r')
+if args[1][-3:]=='.gz':
+	f_viterbi=gzip.open(args[1],'r')
+else:
+	f_viterbi=open(args[1],'r')
+
+
 #f_indiv=open(args[2],'r')
 f_marker_location=open(args[2],'r')
 viterbi_data=[]
