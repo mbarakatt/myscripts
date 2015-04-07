@@ -13,11 +13,26 @@ np.random.seed(5)
 iris = datasets.load_iris()
 X = iris.data
 y = iris.target
-f = open(sys.argv[1], 'r')
+
+# Try to use content in argv[1] o/w uses stdin
+try:
+	input_name = sys.argv[1]
+	f = open(input_name, 'r')
+except:
+	input_name = 'stdin'
+	f = sys.stdin
+
+# Trying to load the markers
+try:
+	markers = map(int, np.loadtxt('markers.txt'))
+	HAS_MARKER = True
+except:
+	HAS_MARKER = False
+
 X = np.array(map(lambda l: [int(c) for c in l[:-1]], f))
 y = np.array([0]*int(len(X)/2.) + [1]*int(len(X)/2.) )
 
-fig = plt.figure(1, figsize=(8, 6))
+fig = plt.figure(1, figsize=(16, 12))
 # plt.clf()
 ax = fig.add_subplot(111)  # Axes3D(fig, rect=[0, 0, .95, 1], elev=48, azim=134)
 
@@ -33,8 +48,11 @@ X = pca.transform(X)
 #               horizontalalignment='center',
 #               bbox=dict(alpha=.5, edgecolor='w', facecolor='w'))
 # Reorder the labels to have colors matching the cluster results
-y = np.choose(y, [1, 2]).astype(np.float)
-ax.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.spectral)
+if not HAS_MARKER:
+	for p in range(len(X)):
+		ax.scatter(X[p, 0], X[p, 1], marker=r"$%d$" % markers[p], c=markers[p])#, cmap=plt.cm.spectral)
+else:
+	ax.scatter(X[:, 0], X[:, 1], marker='o', c=markers)
 
 # x_surf = [X[:, 0].min(), X[:, 0].max(),
 #           X[:, 0].min(), X[:, 0].max()]
@@ -51,11 +69,11 @@ ax.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.spectral)
 # ax.w_yaxis.set_ticklabels([])
 # ax.w_zaxis.set_ticklabels([])
 
-ax.set_title(sys.argv[1])
+ax.set_title(input_name)
 ax.set_xlabel(pca.explained_variance_ratio_[0])
 ax.set_ylabel(pca.explained_variance_ratio_[1])
 
-plt.savefig('%s.jpg' % sys.argv[1])
+plt.savefig('%s.jpg' % input_name)
 
 
 
