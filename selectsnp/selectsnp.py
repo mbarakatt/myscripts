@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import sys
 fin=sys.stdin
 fout=sys.stdout
