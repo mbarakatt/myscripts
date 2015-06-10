@@ -2,6 +2,7 @@
 import sys
 arg=sys.argv
 import os
+import numpy as np
 
 
 #usage: python haps2RFMix.py Admixed_pop.haps refpop1.haps refpop2.haps ... out_folder out_name
@@ -46,22 +47,43 @@ falleles=open(OUTPUTALLELES,'w')
 OUTPUTCLASSES=os.path.join(out_folder,"classes" ) + "/classes." + out_name + ".chr" + chr + ".txt"
 fclasses=open(OUTPUTCLASSES,'w')
 
-#flip=0
+def complement(n):
+	if n == 'A':
+		return 'T'
+	if n == 'T':
+		return 'A'
+	if n == 'G':
+		return 'C'
+	if n == 'C':
+		return 'G'
+
+flip=0
 #total=0
 count=0
 cont=True
 while cont:
 	alllines=[]
-	for file in fhaps:
-		alllines.append(file.readline().split())
+	for f in fhaps:
+		alllines.append(f.readline().split())
 	if len(alllines[0]) < 2 :
 		break
 	geno1=alllines[0][3:5]
 	geno2=alllines[1][3:5]
-	#total+=1
-	#check if flipped
-	if (geno1[0] == geno2[1] and geno1[1] == geno2[0] ):# or (geno1[0] == complement(geno2[1]) and  geno1[1] == complement(geno2[0]) ):
+	# total+=1
+	# check if flipped
+	# We need to check if the 0's and 1's are flipped.
+	# We first deal with the undistinguisable cases
+	# We use the alleles frequency for that. Assuming the frequency for our data should be as 
+	# close as possible to the panel's. 
+	if (geno1[0] in ['G','C'] and geno1[1] in ['G','C']) or (geno1[0] in ['T','A'] and geno1[1] in ['T','A']):
+	# if (geno1[0] == complement(geno2[1]) and  geno1[1] == complement(geno2[0])):
+		freq = alllines[0].count('1')/float(len(alllines[0]))
+		freq_panel = np.sum([ i.count('1') for i in alllines[1:] ]) / float(np.sum([ len(i) for i in alllines[1:]]))
+		if np.absolute(freq - freq_panel) > np.absolute(freq - (1 - freq_panel)):
+			
+			alllines[0]= alllines[0][:5] + [str((int(b) + 1) % 2) for b in alllines[0][5:]]
 		#flip+=1
+	elif (geno1[0] == geno2[1] and geno1[1] == geno2[0] ) or (geno1[0] == complement(geno2[1]) and  geno1[1] == complement(geno2[0]) ):
 		#print flip, total
 		alllines[0]= alllines[0][:5] + [str((int(b) + 1) % 2) for b in alllines[0][5:]]
 	outputline=[]
