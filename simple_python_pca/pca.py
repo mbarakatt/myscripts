@@ -12,9 +12,6 @@ from sklearn import datasets
 
 np.random.seed(5)
 
-iris = datasets.load_iris()
-X = iris.data
-y = iris.target
 
 # Try to use content in argv[1] o/w uses stdin
 try:
