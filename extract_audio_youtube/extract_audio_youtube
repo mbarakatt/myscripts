@@ -1,0 +1,12 @@
+#!/bin/bash
+
+URL=$1
+FINAL_NAME=$2
+
+print Usage: extract_audio_youtube URL FINAL_NAME
+print 	Note: audio will be converted in mono
+
+youtube_dl $1 --output temp
+ffmpeg -i temp.mp4 -ac 1 $FINAL_NAME.mp3 
+rm temp.mp4
+
