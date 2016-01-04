@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
-continent_color = np.array([167,167,167)) / 255.
+continent_color = np.array([177,177,177]) / 255.
 
 
 # setup Lambert Conformal basemap.
@@ -12,8 +12,6 @@ continent_color = np.array([167,167,167)) / 255.
 # m = Basemap(projection='merc',llcrnrlat=-90,urcrnrlat=90,llcrnrlon=-180,urcrnrlon=180,resolution='l')
 m = Basemap(projection='cyl',llcrnrlat=25,urcrnrlat=39,llcrnrlon=-95,urcrnrlon=-74,resolution='i')
 
-# draw coastlines.
-# m.drawcoastlines()
 # draw a boundary around the map, fill the background.
 # this background will end up being the ocean color, since
 # the continents will be drawn on top.
@@ -21,7 +19,6 @@ m.drawmapboundary(color='white', fill_color='white', linewidth=0)
 m.drawcountries(linewidth=0.3,color='white')
 m.drawstates(linewidth=0.2, color='white')
 # fill continents, set lake color same as ocean color.
-# m.fillcontinents(color='coral',lake_color='aqua')
 m.fillcontinents(color=continent_color, lake_color='white')
 plt.subplots_adjust(left=0., right=1., top=1., bottom=0.)
 plt.savefig('test.pdf',bbox_inches='tight')
