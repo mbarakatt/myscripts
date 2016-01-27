@@ -1,10 +1,14 @@
 #!/bin/bash
 
+
+if [ "$#" -ne 2 ]; then
+	echo Usage: extract_audio_youtube URL FINAL_NAME
+	echo 	Note: audio will be converted in mono
+	exit
+fi
+
 URL=$1
 FINAL_NAME=$2
-
-echo Usage: extract_audio_youtube URL FINAL_NAME
-echo 	Note: audio will be converted in mono
 
 youtube-dl $1 --output temp
 ffmpeg -i temp.mp4 -ac 1 $FINAL_NAME.mp3 
