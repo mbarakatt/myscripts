@@ -48,9 +48,9 @@ if not HAS_MARKER:
 else:
 	ax.scatter(X[:, 0], X[:, 1], marker='o', c=markers)
 
-ax.set_xlabel(pca.explained_variance_ratio_[0])
-ax.set_ylabel(pca.explained_variance_ratio_[1])
 
+plt.xlabel('PC1 (%.1f%%)' % pca.explained_variance_ratio_[0]*100, fontsize=17)
+plt.xlabel('PC2 (%.1f%%)' % pca.explained_variance_ratio_[1]*100, fontsize=17)
 plt.savefig('%s.pdf' % 'pca')
 
 
