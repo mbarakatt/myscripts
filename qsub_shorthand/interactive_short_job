@@ -1,0 +1,19 @@
+
+PPN="1"
+
+if [ "$#" -ne 0 ] ; then 
+	PPN=$1
+fi
+
+printf "Requesting interactive job with 1 node and $PPN ppn. \n \
+\t job will run in CWD. \n\n "
+
+
+qsub -I \
+	-l walltime=1:00:00 \
+	-l nodes=1:ppn=$PPN \
+	-d $(pwd -P) # defines the working directory of the job
+
+
+# important information from: https://wiki.calculquebec.ca/w/Ex%C3%A9cuter_une_t%C3%A2che/en
+# Available memory varies from node to node on Briarée. All nodes have 12 cores, but there are 316 nodes with 24 GB (2 GB per core), 314 nodes with 48 GB (4 GB per core), and 42 nodes with 96 GB (8 GB per core). You can ask for nodes with 48 GB by adding the property "m48G" in the following way: -l nodes=100:m48G:ppn=12. Similarly you can specify the m96G property to obtain nodes with 96 GB, and m24G to get nodes with 24 GB. It is however generally not necessary to ask for m24G because Maui checks for availability of nodes in increasing memory order.

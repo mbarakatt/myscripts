@@ -1,0 +1,82 @@
+#!/bin/bash
+usage="Usage for Quick msub bash script \"Qmsub\" \n \n Qmsub [-h] [-n] [-s] bashscripttorun [arg_list] \n \t -h 2 will run a job with walltime of two hours (Default 24) \n \t -n 2 will run a job with two cpus (Default 1) \n \t -s will submit a short job of 20 min, only 5 of those jobs can run at the same time.\n"
+
+#Setting the default values that might be overwritten by the command line arguments
+WALLTIME_HOURS=24
+NUMBER_CPU=1
+QUEUE="sw"
+SHORTJOB=""
+SCRIPT=""
+WALLTIME_MINUTES="00"
+
+while (( $# )) ; do
+    case $1 in
+        "-h")
+            WALLTIME_HOURS=$2
+            shift
+            ;;
+        "-n")
+            NUMBER_CPU="$2"
+            shift
+            ;;
+        "-s")
+            # SHORTJOB="-l qos=short"
+            WALLTIME_HOURS=0
+            WALLTIME_MINUTES="20"
+            ;;
+        "-I")
+            # User accidentally wants an interactive session!
+            echo "The interactive feature can only be used with the msub command not with Qmsub"
+            exit
+            ;;
+        "-i")
+            echo "The interactive feature can only be used with the msub command now with Qmsub"
+            exit
+            ;;            
+        *)
+            SCRIPT=$1
+            shift
+            break
+            ;;
+    esac
+    shift
+done
+
+if test -n "$SHORTJOB" && test "$QUEUE" != "sw" ; then
+    echo "The shortjob feature can only be used on compute nodes. (-q sw)"
+    exit 1
+fi
+
+# Testing if SCRIPT is null
+if test -z "$SCRIPT" ; then
+    echo "No script given to run."
+    echo -e "$usage"
+    exit 1
+fi
+
+# Testing if file exists
+# if ! test -e "$SCRIPT" ; then
+#     echo "The script does not exist."
+#     echo "Note that Qmsub does not search in \$PATH."
+#     exit 1
+# fi
+
+ARGS="$@" # the remaining command line arguments, after the script path
+
+#Reading the script to execute and the arguments that follow
+execution_folder=${PWD}  #$(dirname $(readlink -f $SCRIPT))
+mkdir -p $execution_folder/log
+
+# Using argument somehow for the name of the job and logs.
+i="$(echo "$SCRIPT $ARGS" | sed 's/\/\| /-/g' | cut -c-50)-$(date +%s)" 
+printf "Log file in log/o_$i and log/e_$i"
+
+# args=$(readlink -f $SCRIPT)
+args="$SCRIPT $ARGS"
+echo '\n'
+echo 'args;' $args
+
+qsub $SHORTJOB -l nodes=1:ppn=${NUMBER_CPU},walltime=$WALLTIME_HOURS:$WALLTIME_MINUTES:00 \
+    -v FASTQ_ARGS="$args" -N job${i} -d $execution_folder \
+    -e $execution_folder/log/e_${i} -o $execution_folder/log/o_${i} \
+    $(which fastq_args | xargs readlink -f)
