@@ -1,0 +1,23 @@
+s script is essential to make  fastq work. do not delete
+##everything is in $1 --> after modification on abacus it seems that in oder to get everything now, one needs to use $@.
+
+# We take the first 
+for i in $FASTQ_ARGS
+do
+    SCRIPT="$(readlink -m $i)"
+    # cd "$(dirname $SCRIPT)"
+    break
+done
+
+
+if test -x "$SCRIPT" ; then
+    temp="./"$FASTQ_ARGS
+elif ! test -e "$SCRIPT"; then  # if the script is not in folder we assume it's in $PATH
+    temp="$FASTQ_ARGS"
+else
+    temp="exec bash -- "$FASTQ_ARGS
+fi
+
+echo Working Directory:$PWD
+
+eval $temp

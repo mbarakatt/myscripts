@@ -76,12 +76,12 @@ while cont:
 	# We use the alleles frequency for that. Assuming the frequency for our data should be as 
 	# close as possible to the panel's. 
 	if (geno1[0] in ['G','C'] and geno1[1] in ['G','C']) or (geno1[0] in ['T','A'] and geno1[1] in ['T','A']):
-	# if (geno1[0] == complement(geno2[1]) and  geno1[1] == complement(geno2[0])):
-		freq = alllines[0].count('1')/float(len(alllines[0]))
-		freq_panel = np.sum([ i.count('1') for i in alllines[1:] ]) / float(np.sum([ len(i) for i in alllines[1:]]))
-		if np.absolute(freq - freq_panel) > np.absolute(freq - (1 - freq_panel)):
-			
-			alllines[0]= alllines[0][:5] + [str((int(b) + 1) % 2) for b in alllines[0][5:]]
+		raise("Ambiguous case!")
+#		freq = alllines[0].count('1')/float(len(alllines[0]))
+#		freq_panel = np.sum([ i.count('1') for i in alllines[1:] ]) / float(np.sum([ len(i) for i in alllines[1:]]))
+#		if np.absolute(freq - freq_panel) > np.absolute(freq - (1 - freq_panel)):
+#			
+#			alllines[0]= alllines[0][:5] + [str((int(b) + 1) % 2) for b in alllines[0][5:]]
 		#flip+=1
 	elif (geno1[0] == geno2[1] and geno1[1] == geno2[0] ) or (geno1[0] == complement(geno2[1]) and  geno1[1] == complement(geno2[0]) ):
 		#print flip, total
