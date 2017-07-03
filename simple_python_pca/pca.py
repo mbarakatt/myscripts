@@ -24,7 +24,9 @@ try:
 except:
 	HAS_MARKER = False
 
-X = np.array(map(lambda l: [int(c) for c in l[:-1]], f))
+print "loading data"
+X = np.genfromtxt(sys.stdin, dtype=np.int, delimiter=1)
+# X = np.array(map(lambda l: [int(c) for c in l[:-1]], f))
 y = np.array([0]*int(len(X)/2.) + [1]*int(len(X)/2.) )
 
 
@@ -37,6 +39,7 @@ fig = plt.figure(1, figsize=(16, 12))
 # plt.clf()
 ax = fig.add_subplot(111)  # Axes3D(fig, rect=[0, 0, .95, 1], elev=48, azim=134)
 
+print 'Starting decomposition'
 # plt.cla()
 pca = decomposition.PCA(n_components=2)
 pca.fit(X)
